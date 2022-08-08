@@ -63,10 +63,10 @@ age_vars <- c(
   female_85_over = "B01001_049"
 )
 
-male_under_5 <- "B01001_003"
-female_under_5 <-"B01001_027"
+male_under_5 <- "B01001_003E"
+female_under_5 <-"B01001_027E"
 
-age_under5 <-  sum(as.numeric("male_under_5"), as.numeric("female_under_5"), na.rm = TRUE)
+age_under5 <-  sum("male_under_5","female_under_5")
 age_under5
 
 ##Setting up race variables
@@ -80,6 +80,17 @@ race_vars <- c(
   hispanic = "B03002_012"
 )
 
+
+
+test1 <- get_acs(
+  geography = "tract",
+  state = 36,
+  variables =race_vars,
+  year = 2019,
+  output = "wide"
+)
+test1
+view(test1)
 
 ##Setting up household burden variables, for percentage of population spending 30%
 ##or more of income on rent or those who own a house
@@ -110,8 +121,8 @@ renter_over_75k <- "B25106_044"
 
 # Sum of owners and renters for housing burden
 
-owner_housing_burden <-  sum(as.numeric("owner_less_20k"), as.numeric("owner_less_35k"), as.numeric("owner_less_50k"), as.numeric("owner_less_75k"),as.numeric("owner_over_75k"),na.rm = TRUE)
-renter_housing_burden <-  sum(as.numeric("renter_less_20k"), as.numeric("renter_less_35k"), as.numeric("renter_less_50k"), as.numeric("renter_less_75k"),as.numeric("renter_less_75k"),na.rm = TRUE)
+practice1$owner_housing_burden = practice1$B25106_006E + practice1$B25106_010E + practice1$B25106_014E + practice1$B25106_018E + practice1$B25106_022E
+practice1$renter_housing_burden <-  sum(as.numeric("renter_less_20k"), as.numeric("renter_less_35k"), as.numeric("renter_less_50k"), as.numeric("renter_less_75k"),as.numeric("renter_less_75k"))
 # Practice
 practice1 <- get_acs(
   geography = "tract",
