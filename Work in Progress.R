@@ -15,53 +15,59 @@ total_population <- "B01001_001"
 
 # Setting up age variables 
 age_vars <- c(
-  male_under_5 = as.numeric("B01001_003"), 
-  male_5_9 = as.numeric("B01001_004"), 
-  male_10_14 = as.numeric("B01001_005"),  
-  male_15_17 = as.numeric("B01001_006"), 
-  male_18_19 = as.numeric("B01001_007"),
-  male_20 = as.numeric("B01001_008"),
-  male_21 = as.numeric("B01001_009"),
-  male_22_24 = as.numeric("B01001_010"),
-  male_25_29 = as.numeric("B01001_011"),
-  male_30_34 = as.numeric("B01001_012"),
-  male_35_39 = as.numeric("B01001_013"),
-  male_40_44 = as.numeric("B01001_014"),
-  male_45_49 = as.numeric("B01001_015"),
-  male_50_54 = as.numeric("B01001_016"),
-  male_55_59 = as.numeric("B01001_017"),
-  male_60_61 = as.numeric("B01001_018"),
-  male_62_64 = as.numeric("B01001_019"),
-  male_65_66 = as.numeric("B01001_020"),
-  male_67_69 = as.numeric("B01001_021"),
-  male_70_74 = as.numeric("B01001_022"),
-  male_75_79 = as.numeric("B01001_023"),
-  male_80_84 = as.numeric("B01001_024"),
-  male_85_over = as.numeric("B01001_025"),
-  female_under_5 = as.numeric("B01001_027"),
-  female_5_9 = as.numeric("B01001_028"), 
-  female_10_14 = as.numeric("B01001_029"),
-  female_15_17 = as.numeric("B01001_030"), 
-  female_18_19 =  as.numeric("B01001_031"),
-  female_20 = as.numeric("B01001_032"),
-  female_21 = as.numeric("B01001_033"), 
-  female_22_24 = as.numeric("B01001_034"),
-  female_25_29 = as.numeric("B01001_035"),
-  female_30_34 = as.numeric("B01001_036"),
-  female_35_39 = as.numeric("B01001_037"),
-  female_40_44 = as.numeric("B01001_038"),
-  female_45_49 = as.numeric("B01001_039"),
-  female_50_54 = as.numeric("B01001_040"),
-  female_55_59 = as.numeric("B01001_041"),
-  female_60_61 = as.numeric("B01001_042"),
-  female_62_64 = as.numeric("B01001_043"),
-  female_65_66 = as.numeric("B01001_044"),
-  female_67_69 = as.numeric("B01001_045"),
-  female_70_74 = as.numeric("B01001_046"),
-  female_75_79 = as.numeric("B01001_047"),
-  female_80_84 = as.numeric("B01001_048"),
-  female_85_over = as.numeric("B01001_049")
+  male_under_5 = "B01001_003", 
+  male_5_9 = "B01001_004", 
+  male_10_14 ="B01001_005",  
+  male_15_17 = "B01001_006", 
+  male_18_19 = "B01001_007",
+  male_20 = "B01001_008",
+  male_21 = "B01001_009",
+  male_22_24 ="B01001_010",
+  male_25_29 = "B01001_011",
+  male_30_34 = "B01001_012",
+  male_35_39 = "B01001_013",
+  male_40_44 = "B01001_014",
+  male_45_49 = "B01001_015",
+  male_50_54 = "B01001_016",
+  male_55_59 = "B01001_017",
+  male_60_61 = "B01001_018",
+  male_62_64 = "B01001_019",
+  male_65_66 = "B01001_020",
+  male_67_69 = "B01001_021",
+  male_70_74 = "B01001_022",
+  male_75_79 = "B01001_023",
+  male_80_84 = "B01001_024",
+  male_85_over = "B01001_025",
+  female_under_5 = "B01001_027",
+  female_5_9 = "B01001_028", 
+  female_10_14 = "B01001_029",
+  female_15_17 = "B01001_030", 
+  female_18_19 =  "B01001_031",
+  female_20 = "B01001_032",
+  female_21 = "B01001_033", 
+  female_22_24 = "B01001_034",
+  female_25_29 = "B01001_035",
+  female_30_34 = "B01001_036",
+  female_35_39 = "B01001_037",
+  female_40_44 = "B01001_038",
+  female_45_49 = "B01001_039",
+  female_50_54 = "B01001_040",
+  female_55_59 = "B01001_041",
+  female_60_61 = "B01001_042",
+  female_62_64 = "B01001_043",
+  female_65_66 = "B01001_044",
+  female_67_69 = "B01001_045",
+  female_70_74 = "B01001_046",
+  female_75_79 = "B01001_047",
+  female_80_84 = "B01001_048",
+  female_85_over = "B01001_049"
 )
+
+male_under_5 <- "B01001_003"
+female_under_5 <-"B01001_027"
+
+age_under5 <-  sum(as.numeric("male_under_5"), as.numeric("female_under_5"), na.rm = TRUE)
+age_under5
 
 ##Setting up race variables
 
@@ -78,37 +84,44 @@ race_vars <- c(
 ##Setting up household burden variables, for percentage of population spending 30%
 ##or more of income on rent or those who own a house
 housing_burden_vars <- c(
-  owner_less_20k = as.numeric("B25106_006"), 
-  owner_less_35k = as.numeric("B25106_010"), 
-  owner_less_50k = as.numeric("B25106_014"),  
-  owner_less_75k = as.numeric("B25106_018"),
-  owner_over_75k = as.numeric("B25106_022"),
-  renter_less_20k = as.numeric("B25106_028"), 
-  renter_less_35k = as.numeric("B25106_032"), 
-  renter_less_50k = as.numeric("B25106_036"),  
-  renter_less_75k = as.numeric("B25106_040"),
-  renter_over_75k = as.numeric("B25106_044")
+  owner_less_20k <- "B25106_006",
+  owner_less_35k <- "B25106_010",
+  owner_less_50k <- "B25106_014", 
+  owner_less_75k <- "B25106_018",
+  owner_over_75k <- "B25106_022",
+  renter_less_20k <- "B25106_028",
+  renter_less_35k <- "B25106_032",
+  renter_less_50k <- "B25106_036", 
+  renter_less_75k <- "B25106_040",
+  renter_over_75k <- "B25106_044"
 )
+#is.na(housing_burden_vars)
 
-class("renter_less_75k")
+owner_less_20k <- "B25106_006" 
+owner_less_35k <- "B25106_010"
+owner_less_50k <- "B25106_014" 
+owner_less_75k <- "B25106_018"
+owner_over_75k <- "B25106_022"
+renter_less_20k <- "B25106_028"
+renter_less_35k <- "B25106_032"
+renter_less_50k <- "B25106_036" 
+renter_less_75k <- "B25106_040"
+renter_over_75k <- "B25106_044"
 
 # Sum of owners and renters for housing burden
 
-owner_housing_burden <-  sum(as.numeric("owner_less_20k", "owner_less_35k", "owner_less_50k", "owner_less_75k","owner_over_75k", na.rm = FALSE))
-
+owner_housing_burden <-  sum(as.numeric("owner_less_20k"), as.numeric("owner_less_35k"), as.numeric("owner_less_50k"), as.numeric("owner_less_75k"),as.numeric("owner_over_75k"),na.rm = TRUE)
+renter_housing_burden <-  sum(as.numeric("renter_less_20k"), as.numeric("renter_less_35k"), as.numeric("renter_less_50k"), as.numeric("renter_less_75k"),as.numeric("renter_less_75k"),na.rm = TRUE)
 # Practice
-practice <- get_acs(
+practice1 <- get_acs(
   geography = "tract",
   state = 36,
-  variables = c(
-    age1 = race_vars,
-    race1 = race_vars,
-    house1 = housing_burden_vars),
+  variables =housing_burden_vars,
   year = 2019,
   output = "wide"
 )
-practice
-view(practice)
+practice1
+view(practice1)
 
 #Pulling all race, age and housing burden separately
 
