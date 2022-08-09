@@ -165,7 +165,7 @@ view(ny_info_data)
 
 
 #Merging the variables to make the table smaller and more readable
-ny_info_data2 <- ny_info_data%>%
+ny_info_data2 <- str(ny_info_data%>%
   mutate(age_under5 = male_under_5 + female_under_5,
          age_5_9 = male_5_9 + female_5_9,
          age_10_14 = male_10_14 + female_10_14,
@@ -185,13 +185,11 @@ ny_info_data2 <- ny_info_data%>%
          age_80_84 =  male_80_84 + female_80_84,
          age_85_over = male_85_over + female_85_over,
          owner_housing_burden = owner_less_20k + owner_less_35k + owner_less_50k +owner_less_75k + owner_over_75k,
-         renter_housing_burden = renter_less_20k + renter_less_35k + renter_less_50k + renter_less_75k + renter_over_75k)
+         renter_housing_burden = renter_less_20k + renter_less_35k + renter_less_50k + renter_less_75k + renter_over_75k))
 
 
 
-
-
-
+class(male_under_5)
 
 
 
@@ -200,7 +198,6 @@ ny_info_data2 <- ny_info_data%>%
 
 practice1$owner_housing_burden = practice1$B25106_006E + practice1$B25106_010E + practice1$B25106_014E + practice1$B25106_018E + practice1$B25106_022E
 practice1$renter_housing_burden <-  sum(as.numeric("renter_less_20k"), as.numeric("renter_less_35k"), as.numeric("renter_less_50k"), as.numeric("renter_less_75k"),as.numeric("renter_less_75k"))
-# Practice
 
 
 
