@@ -91,7 +91,6 @@ housing_burden_vars <- c(
   renter_over_75k = "B25106_044"
 )
 
-
 ny_info_data <- get_acs(
   geography = "tract",
   state = 36,
@@ -161,10 +160,11 @@ ny_info_data <- get_acs(
   year = 2019,
   output = "wide"
 )
-view(ny_info_data)
 
 
 #Merging the variables to make the table smaller and more readable
+pivot_wider(id_cols = c(GEOID, NAME), names_from=variable,
+            values_from=estimate) %>%
 ny_info_data2 <- str(ny_info_data%>%
   mutate(age_under5 = male_under_5 + female_under_5,
          age_5_9 = male_5_9 + female_5_9,
@@ -189,7 +189,6 @@ ny_info_data2 <- str(ny_info_data%>%
 
 
 
-class(male_under_5)
 
 
 
