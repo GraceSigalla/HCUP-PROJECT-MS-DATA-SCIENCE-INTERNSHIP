@@ -2,8 +2,6 @@
 
 library(tidyverse)
 library(tidycensus)
-# census_api_key ("df0b1e647032e261b17a090dffbcf03a2d331fc4", install = TRUE)
-# readRenviron("~/.Renviron")
 
 ## First step, getting list variables that we will be working with for this project
 vars <- load_variables(2019, "acs5", cache =TRUE)
@@ -161,9 +159,9 @@ ny_info_data <- get_acs(
   output = "wide"
 )
 ny_info_data
+view(ny_info_data)
 
 #Merging the variables to make the table smaller and more readable without pivot_wider
-
 
 ny_info_data2 <- ny_info_data%>%
   mutate(age_under5 = male_under_5E + female_under_5E,
@@ -185,8 +183,10 @@ ny_info_data2 <- ny_info_data%>%
          age_80_84 =  male_80_84E + female_80_84E,
          age_85_over = male_85_overE + female_85_overE,
          owner_housing_burden = owner_less_20kE + owner_less_35kE + owner_less_50kE +owner_less_75kE + owner_over_75kE,
-         renter_housing_burden = renter_less_20kE + renter_less_35kE + renter_less_50kE + renter_less_75kE + renter_over_75kE)
-
+         renter_housing_burden = renter_less_20kE + renter_less_35kE + renter_less_50kE + renter_less_75kE + renter_over_75kE)%>%
+  select(GEOID, NAME, whiteE, blackE, nativeE, asianE, HIPIE, age_under5, age_5_9, age_10_14, age_15_19, age_20_24, age_25_29, age_30_34, age_35_39, age_40_44,age_45_49,
+         age_50_54, age_55_59, age_60_64, age_65_69, age_70_74, age_75_79, age_80_84, age_85_over, owner_housing_burden, renter_housing_burden)
+view(ny_info_data2)
 
 #Merging the variables to make the table smaller and more readable with pivot_wider
 
@@ -256,16 +256,16 @@ ny_info_data_tst <- get_acs(
     renter_less_50k = "B25106_036", 
     renter_less_75k = "B25106_040",
     renter_over_75k = "B25106_044"),
-  year = 2019,
+  year = 2019
 )
-ny_info_data_tst
+view(ny_info_data_tst)
 
-ny_info_wide <- ny_info_data_tst %<%
+ny_info_wide <- ny_info_data_tst %>%
   pivot_wider(id_cols = c(GEOID, NAME), names_from=variable,
               values_from=estimate)
 
-ny_info_wider <- ny_info_wide %<%
-  mutate(age_under5 = male_under_5E + female_under_5E,
+ny_info_wider <- ny_info_wide %>%
+  mutate(age_under5 = male_under_5 + female_under_5,
          age_5_9 = male_5_9 + female_5_9,
          age_10_14 = male_10_14 + female_10_14,
          age_15_19 = male_15_17 + male_18_19 + female_15_17 + female_18_19,
@@ -284,226 +284,14 @@ ny_info_wider <- ny_info_wide %<%
          age_80_84 =  male_80_84 + female_80_84,
          age_85_over = male_85_over + female_85_over,
          owner_housing_burden = owner_less_20k + owner_less_35k + owner_less_50k +owner_less_75k + owner_over_75k,
-         renter_housing_burden = renter_less_20k + renter_less_35k + renter_less_50k + renter_less_75k + renter_over_75k)
+         renter_housing_burden = renter_less_20k + renter_less_35k + renter_less_50k + renter_less_75k + renter_over_75k)%>%
+  select(GEOID, NAME, white, black, native, asian, HIPI, age_under5, age_5_9, age_10_14, age_15_19, age_20_24, age_25_29, age_30_34, age_35_39, age_40_44,age_45_49,
+         age_50_54, age_55_59, age_60_64, age_65_69, age_70_74, age_75_79, age_80_84, age_85_over, owner_housing_burden, renter_housing_burden)
+ny_info_wider
+view(ny_info_wider)
 
 
 
-
-#str(ny_info_data)
-
-#ny_info_data3 <- ny_info_data%>%
-  #mutate(age_under5 = male_under_5E + female_under_5E)
-
-
-# Sum of owners and renters for housing burden
-
-#practice1$owner_housing_burden = practice1$B25106_006E + practice1$B25106_010E + practice1$B25106_014E + practice1$B25106_018E + practice1$B25106_022E
-#practice1$renter_housing_burden <-  sum(as.numeric("renter_less_20k"), as.numeric("renter_less_35k"), as.numeric("renter_less_50k"), as.numeric("renter_less_75k"),as.numeric("renter_less_75k"))
-
-
-
-##Pulling housing burden data
-#ny_housing_burd <- get_acs(
- # geography = "county",
- # state = 36,
-  #variables = housing_burden_vars,
-  #year = 2019,
-  #output = "wide"
-#)
-#ny_housing_burd
-#view(ny_housing_burd)
-
-
-#Pulling agegroup, race, sex and ethnicity
-#ny_est <- get_estimates(
- # geography = "county",
-  #product = "characteristics",
-  #breakdown = c("AGEGROUP", "RACE" ,"SEX","HISP"),
-  #breakdown_labels = TRUE,
-  #state = 36,
-  #year = 2019,
-  #output = "wide"
-#)
-#iew(ny_est)
-
-#PULLING DATA USING ZCTA 
-
-
-#Pulling race data
-#race_info <- get_acs(
- # geography = "zcta",
-  #state = 36,
-  #variables = race_vars,
-  #year = 2019,
-  #total = total_population,
-  #output = "wide"
-#)
-#race_info
-#view(race_info)
-
-##Pulling housing burden data
-#burden <- get_acs(
-#  geography = "zcta",
- # state = 36,
-  #variables = housing_burden_vars,
-  #year = 2019,
-  #output = "wide"
-#)
-#burden
-#iew(burden)
-
-#Pulling median age, race & housing burden
-#ny_info <- get_acs(
- # geography = "zcta",
- # state = 36,
- # variables = c(housing_burden_vars,race_vars, median_age = "B01002_001"),
-  #year = 2019,
- # output = "wide"
-#)
-#ny_info
-#view(ny_info)
-
-
-#my_info1<-my_info%>%
-
-
-#IMPORTING EXCEL FILE TO R - ZIPCODE CROSSWALK
-
-#zcta_df <- data.table(pipe("pbpaste"), sep = "\t", header = TRUE)
-#zcta_df
-#view(zcta_df)
-
-#EXERCISE*data.table - easier to save file as csv. or fread...TRY and get the same answer using the crosswalks, left join on GEOID (allocation factor), groub by ZCTA. 
-
-
-#Pulling agegroup, race, sex and ethnicity
-#ny_est <- get_estimates(
- # geography = "county",
-  #product = "characteristics",
-  #breakdown = c("AGEGROUP", "RACE" ,"SEX","HISP"),
-  #breakdown_labels = TRUE,
-  #state = 36,
-  #year = 2019,
-  #output = "wide"
-#)
-#iew(ny_est)
-
-#zip_df <- merge(ny_info, zct by = "GEOID", all = TRUE)
-#view(both_df)
-
-##Setting up age variables (can't use this, brings out an error)
-#age_vars <- c(
-#  male_under_5 = "B01001_003", 
-#  male_5_9 = "B01001_004", 
-#  male_10_14 = "B01001_005",  
-#  male_15_19 = sum(c("B01001_06", "B01001_07")), 
-#  male_20_24 = sum(c("B01001_08", "B01001_09", "B01001_010")),
-#  female_under_5 = "B01001_027",
-#  female_5_9 = "B01001_028", 
-#  female_10_14 = "B01001_029",
-#  female_15_19 = sum(c("B01001_030", "B01001_031")),
-#  female_20_24 = sum(c("B01001_032", "B01001_033", "B01001_034"))
-#)
-
-## Pulling age data in groups of five, for under below 25 (This code pulls for 
-##individual genders, but doesn't add up values)
-
-#ny_age <- get_acs(
-# state = 36,
-#  variables = age_vars,
-#  year = 2019,
-#  output = "wide"
-#)
-#view(ny_age)
-
-## Pulling race data
-
-#ny_race <- get_acs(
-#  geography = "tract",
-#  state = 36,
-#  variables = c(race = race_vars),
-#  year = 2019,
-#  output = "wide"
-#)
-
-#ny_housing_products <- get_estimates(
-#  geography = "county",
-#  product = "housing",
-#  breakdown = c("SEX","AGEGROUP", "RACE" ,"HISP"),
-#  breakdown_labels = TRUE,
-#  state = 36,
-#  year = 2019
-#)
-#View(ny_housing_products)
-
-
-#practise1 <- ny_age %>%
-#  filter(variable != "B01001_001") %>%
-#  mutate(agegroup = case_when(
-#    variable < "B01001_004" ~ "below5", 
-#    variable < "B01001_005" ~ "below10", 
-#    variable < "B01001_006" ~ "below15",
-#    variable < "B01001_008" ~ "bw20",
-#    variable < "B01001_010" ~ "bw25",
-#    TRUE ~ "above25k"
-#)) 
-
-## This is not very neccesary Pulling median age, median income, from NY with ethnicity groups into account
-#ny_race_inc_age <- get_acs(
-#  geography = "tract",
-#  state = 36,
-#  variables = c(med_inc = "B19013_001",
-#               med_age = "B01002_001",
-#               race = race_vars),
-#  year = 2019,
-#  output = "wide"
-#)
-#ny_race_inc_age
-#view(ny_race_inc_age)
-
-## Practicing with get_estimates and get_flows
-
-#ny_components <- get_estimates(
-#  geography = "county",
-# product = "components",
-#  state = 36,
-# year = 2019
-#)
-#View(ny_components)
-
-#ny_age_test <- get_acs(geography = "tract", 
- #                      product = "characteristics", 
- #                      variables = c("AGEGROUP", "RACE" ,"SEX"),  
- #                      breakdown_labels = TRUE, 
- #                      state = "36",
- #                      output = "wide"
-#)
-#ny_age_test
-#view(ny_age_test)
-
-#ny_test1 <- get_acs(geography = "county", 
- #                   product = "characteristics", 
-  #                  variables = c("AGEGROUP", "HISP" ,"SEX"),  
-  #                  breakdown_labels = TRUE, 
- #                   state = "36",
-#                    year = 2019
-#)
-#ny_test1
-#view(ny_test1)
-
-
-#separate(
- # ny_est,
-  #NAME,
-  #into = c("county", "state"),
-  #sep = ", "
-#)
-
-
-#ny_df <- bind_rows(ny_est, ny_housing_burd)
-#view(ny_df)
-
-##Age by sex?
 
 
 
