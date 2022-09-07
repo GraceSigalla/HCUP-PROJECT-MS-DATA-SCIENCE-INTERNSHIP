@@ -202,8 +202,10 @@ ny_data <- ny_info_wide %>%
   mutate(age_under5 = 100 * ((male_under_5 + female_under_5)/total_pop),
          age_5_9 = 100 * ((male_5_9 + female_5_9)/total_pop),
          age_10_14 = 100 * ((male_10_14 + female_10_14)/total_pop),
-         age_15_19 = 100 * ((male_15_17 + male_18_19 + female_15_17 + female_18_19)/total_pop),
-         age_20_24 = 100 * ((male_20 + male_21 + male_22_24 + female_20 + female_21 + 
+         age_15_19 = 100 * ((male_15_17 + male_18_19 + female_15_17 + 
+                               female_18_19)/total_pop),
+         age_20_24 = 100 * ((male_20 + male_21 + male_22_24 + female_20 + 
+                               female_21 + 
            female_22_24)/total_pop),
          age_25_29 = 100 * ((male_25_29 + female_25_29)/total_pop),
          age_30_34 = 100 * ((male_30_34 + female_30_34)/total_pop),
@@ -212,14 +214,17 @@ ny_data <- ny_info_wide %>%
          age_45_49 = 100 * ((male_45_49 + female_45_49)/total_pop),
          age_50_54 = 100 * ((male_50_54 + female_50_54)/total_pop),
          age_55_59 = 100 * ((male_55_59 + female_55_59)/total_pop),
-         age_60_64 = 100 * ((male_60_61 + male_62_64 + female_60_61 + female_62_64)/total_pop),
-         age_65_69 = 100 * ((male_65_66 + male_67_69 + female_65_66 + female_67_69)/total_pop),
+         age_60_64 = 100 * ((male_60_61 + male_62_64 + female_60_61 + 
+                               female_62_64)/total_pop),
+         age_65_69 = 100 * ((male_65_66 + male_67_69 + female_65_66 + 
+                               female_67_69)/total_pop),
          age_70_74 = 100 * ((male_70_74 + female_70_74)/total_pop),
          age_75_79 =  100 * ((male_75_79 + female_75_79)/total_pop),
          age_80_84 =  100 * ((male_80_84 + female_80_84)/total_pop),
          age_85_over = 100 * ((male_85_over + female_85_over)/total_pop),
-         owner_house_burd = 100 * ((owner_less_20k + owner_less_35k + owner_less_50k + 
-           owner_less_75k + owner_over_75k)/total_pop),
+         owner_house_burd = 100 * ((owner_less_20k + owner_less_35k + 
+                                      owner_less_50k + owner_less_75k + 
+                                      owner_over_75k)/total_pop),
          renter_house_burd = 100 * ((renter_less_20k + renter_less_35k + 
            renter_less_50k + renter_less_75k + renter_over_75k)/total_pop),
          nothisp1 = 100 * (nothisp/total_pop),
@@ -228,15 +233,16 @@ ny_data <- ny_info_wide %>%
          nothisp_ntv = 100 * (nothisp_native/total_pop),
          nothisp_asn = 100 * (nothisp_asian/total_pop),
          nothisp_hp = 100 * (nothisp_HIPI/total_pop),
-         nothisp_other = 100 * ((nothisp_other1 + nothisp_other2 + nothisp_other3 + 
-           nothisp_other4)/total_pop),
+         nothisp_other = 100 * ((nothisp_other1 + nothisp_other2 + 
+                                   nothisp_other3 + nothisp_other4)/total_pop),
          hisp1 = 100 * (hisp/total_pop),
          hisp_wht = 100 * (hisp_white/total_pop),
          hisp_blk = 100 * (hisp_black/total_pop),
          hisp_ntv = 100 * (hisp_native/total_pop),
          hisp_asn = 100 * (hisp_asian/total_pop),
          hisp_hp = 100 * (hisp_HIPI/total_pop),
-         hisp_other = 100 * ((hisp_other1 + hisp_other2 + hisp_other3 + hisp_other4)/total_pop))%>%
+         hisp_other = 100 * ((hisp_other1 + hisp_other2 + hisp_other3 + 
+                                hisp_other4)/total_pop))%>%
   select(GEOID, NAME, nothisp1, nothisp_wht, nothisp_blk, 
          nothisp_ntv, nothisp_asn, nothisp_hp, nothisp_other, hisp1,
          hisp_wht,hisp_blk, hisp_ntv, hisp_asn, hisp_hp, 
@@ -249,30 +255,39 @@ view(ny_data)
 
 #Exploratory Data Analysis
 
+str(ny_data) #type
+
+summary(ny_data) # summary of the data
+
+sum(is.na(ny_data)) # total null values
+
+
 # Histogram
 
 #not hispanic population
 ggplot(ny_data, aes(x = nothisp1)) + 
-  geom_histogram()
+  geom_histogram(bins = 30)
 
 # hispanic population
 ggplot(ny_data, aes(x = hisp1)) + 
-  geom_histogram(bins = 100)
+  geom_histogram(bins = 30)
 
 # Scatterplot
 
 ggplot(ny_data, aes(x = nothisp_wht, y = age_25_29)) + 
   geom_point()
 
-#Box Plot
-ggplot(data= ny_data, mapping = aes(x = NAME, y = nothisp_wht)) + 
-  geom_boxplot() + 
-  theme(
-    axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5))
 
 #Bar plot
-ggplot(ny_data) + 
-  geom_col(mapping = aes(x = variable, y = estimate))
 
+ggplot(ny_data) + geom_bar(aes(renter_house_burd)) + labs(title = paste("Renters Housing Burden"), 
+                                                x = "Renters House Burden", y = "Income Level") + theme_bw()
+
+
+ggplot(ny_data) + 
+  geom_bar(mapping = aes(x = nothisp_blk, y = age_40_44))
+
+#df <- c(age_under5, age_5_9, age_10_14, age_15_19, age_20_24, age_25_29, age_30_34, 
+             #age_65_69, age_70_74, age_75_79, age_80_84, age_85_over)
 
 
