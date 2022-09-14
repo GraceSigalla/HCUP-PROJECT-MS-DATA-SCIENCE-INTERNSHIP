@@ -91,6 +91,7 @@ ethnicity_vars <- c(
   hisp_other = sum("B03002_018","B03002_019", "B03002_020", "B03002_021")
 )
 
+
 ##Set up household burden variables, for percentage of population spending 30%
 ##or more of income on rent and those who own a house
 housing_burd_vars <- c(
@@ -198,6 +199,8 @@ ny_info_wide <- ny_info_data %>%
   pivot_wider(id_cols = c(GEOID, NAME), names_from=variable,
               values_from=estimate)
 
+
+
 ny_data <- ny_info_wide %>%
   mutate(age_under5 = 100 * ((male_under_5 + female_under_5)/total_pop),
          age_5_9 = 100 * ((male_5_9 + female_5_9)/total_pop),
@@ -253,41 +256,115 @@ ny_data <- ny_info_wide %>%
 ny_data
 view(ny_data)
 
-#Exploratory Data Analysis
+
+#Exploratory Data Analysis (EDA, Visualization)
+
+# First we need to convert the ny_data to pivot longer in order to do EDA
+
+
+ny_data_long <- ny_data %>%
+  pivot_longer(cols=c(nothisp1:renter_house_burd),
+               names_to="Variables",
+               values_to = "Value")
+view(ny_data_long)
 
 str(ny_data) #type
 
 summary(ny_data) # summary of the data
-
 sum(is.na(ny_data)) # total null values
 
 
-# Histogram
 
-#not hispanic population
-ggplot(ny_data, aes(x = nothisp1)) + 
-  geom_histogram(bins = 30)
+# Creating another data frame to filter the variables we want to include in graph
 
-# hispanic population
-ggplot(ny_data, aes(x = hisp1)) + 
-  geom_histogram(bins = 30)
+#Comparing non-hispanic data by races uaing a line plot
 
-# Scatterplot
+ny_data_long1 <- ny_data_long %>% filter(Variables == 'nothisp_wht'| 
+                                           Variables =='nothisp_blk'|
+                                      Variables =='nothisp_asn'| 
+                                        Variables == 'nothisp_other'| 
+                                        Variables =='nothisp_other'|
+                                        Variables =='nothisp_HIPI'|
+                                        Variables =='nothisp_ntv') %>%
+  group_by(Variables) %>%
+  summarise(Average_value=mean(Value, na.rm = TRUE))
 
-ggplot(ny_data, aes(x = nothisp_wht, y = age_25_29)) + 
+view(ny_data_long1)
+
+ggplot(data=ny_data_long1, aes(x=Variables, y=Average_value, group = 1)) +
+         geom_line() +
+         geom_point()
+
+# Comparing hispanic data by races
+ny_data_long2 <- ny_data_long %>% filter(Variables == 'hisp_wht'| 
+                                           Variables =='hisp_blk'|
+                                           Variables =='hisp_asn'| 
+                                           Variables == 'hisp_other'| 
+                                           Variables =='hisp_other'|
+                                           Variables =='hisp_HIPI'|
+                                           Variables =='hisp_ntv') %>%
+  group_by(Variables) %>%
+  summarise(average_value=mean(Value, na.rm = TRUE))
+
+view(ny_data_long2)
+
+
+
+ggplot(data=ny_data_long2, aes(x=Variables, y=average_value, group = 1)) +
+  geom_line()+
   geom_point()
 
+# Histogram
+
+# Age vizualization
+
+ny_data_long3 <- ny_data_long %>% filter(Variables == 'age_under5'| 
+                                           Variables =='age_5_9'|
+                                           Variables =='age_10_14'| 
+                                           Variables == 'age_15_19'| 
+                                           Variables =='age_20_24'|
+                                           Variables =='age_25_29'|
+                                           Variables =='age_30_34'|
+                                           Variables =='age_35_39'|
+                                           Variables =='age_40_44'| 
+                                           Variables == 'age_45_49'| 
+                                           Variables =='age_50_54'|
+                                           Variables =='age_55_59'|
+                                           Variables =='age_60_64'|
+                                           Variables =='age_65_69'|
+                                           Variables =='age_70_74'|
+                                           Variables =='age_75_79'| 
+                                           Variables == 'age_80_84'| 
+                                           Variables =='age_85_over') %>%
+  group_by(Variables) %>%
+  summarise(average_value=mean(Value, na.rm = TRUE))
+
+view(ny_data_long3)
+
+
+ggplot(data=ny_data_long3, aes(x=Variables, y=average_value, group = 1)) +
+  geom_line()
 
 #Bar plot
 
-ggplot(ny_data) + geom_bar(aes(renter_house_burd)) + labs(title = paste("Renters Housing Burden"), 
-                                                x = "Renters House Burden", y = "Income Level") + theme_bw()
+ny_data_long4 <- ny_data_long %>% filter(Variables == 'owner_house_burd'| 
+                                          Variables =='renter_house_burd') %>%
+  group_by(Variables) %>%
+  summarise(Average_value=mean(Value, na.rm = TRUE))
 
+view(ny_data_long4)
 
-ggplot(ny_data) + 
-  geom_bar(mapping = aes(x = nothisp_blk, y = age_40_44))
+ggplot(ny_data_long4, aes(x =Variables, y =Average_value, fill = "")) + 
+  geom_bar(stat='identity')
 
-#df <- c(age_under5, age_5_9, age_10_14, age_15_19, age_20_24, age_25_29, age_30_34, 
-             #age_65_69, age_70_74, age_75_79, age_80_84, age_85_over)
+# Observations
+ # - Between the non-hispanic and hispanic population, those who identify as 
+#    white are significantly higher. Also, those who identify as native americans
+#    have the lowest population
 
+#  - Between the age groups, age55-59 have the highest population representation
+#    while those 80-84 and 85+ are significantly lower.
+
+# -  Regarding housing burden, the pupulation of those who own houses and use 30%
+#   on paying for housing are a lot more than those who rent.
 
